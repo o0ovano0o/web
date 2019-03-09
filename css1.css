@@ -38,6 +38,7 @@ html, body {
 	width: 100%;
 	height: 310px;
 	display: table;
+	margin-bottom: 0;
 }
 .landing-text {
 	display:  table-cell;
@@ -52,15 +53,41 @@ html, body {
 	font-weight: 300;
 	font-size: 200%;
 }
-#explain {
-	background-color: #405b8263!important;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
-    min-height: 300px;
-    margin-bottom: 40px;
+.col-sm-8#expl {
+	background-color: #405b8263;
+  	margin-bottom: -1px;
     padding-top: 0;
     padding-bottom: 20px; 
+    min-height: 300px;
+    padding-left: 25px;
+	padding-right: 25px;
 }
+#voice-select {
+    display: inline-block;
+    float: left;
+    border-radius: 15px 15px 15px 15px;
+    box-shadow: 0 0 0 5px rgba(0,0,0,.5);
+    width: 90%; 
+}
+#speak {
+    display: inline-block;
+     cursor: pointer;
+    font-size: 18px;
+    background-color: #788688;
+    color: white;
+    padding: 5px 15px;
+    margin-left: 15px; 
+}
+#speak:hover {
+	color: black;
+	background-color: #EE9584;
+}
+#content {
+	background-color: #A8B5BE;
+
+}
+
+
 input {
 	position: relative;
 	display: inline-block;
@@ -119,7 +146,9 @@ footer {
 	max-width: 200px;
 	padding: auto;
 }
-@media (max-width: 768px) {
+
+
+@media (max-width: 760px) {
 	.landing-text h1 {
 		font-size: 300%;
 	}
@@ -138,10 +167,13 @@ footer {
 	height: 310;
 	display: table;
 }
-
+	.col-sm-8#expl {
+			background-color:  #A8B5BE;
+		}
+	
 }
-@media (max-width: 750px) {
-	#explain {
-		margin-top: -21px;
+@media (max-width: 450px) {
+	#speak {
+		margin-top: 15px;
 	}
 }

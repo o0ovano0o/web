@@ -3,12 +3,15 @@
 <head>
 	<title>Web Demo </title>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">	
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel = "stylesheet" href="css1.css">
+	<link rel = "stylesheet" href="css1.css" type="text/css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+ 	 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.2/bootstrap3-typeahead.min.js"></script> 
 </head>
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top" >
@@ -38,42 +41,59 @@
 			<h3>This is your dictionary</h3>
 			<form class="form-inline" action="demo1.php" method="post">
 				
-	      			<input type="text" name='key' placeholder="Type to search..." >
+	      			<input id='key' type="text" name='key' placeholder="Type to search..." autocomplete="off" value="<?php 
+  					if(isset($_POST['key']))
+					echo $_POST['key'];
+  				?>">
 	      	
 	        		<input type="submit" value="Search">
 	        	</div>
 	        	</div>
 	    	</form>
 	</div>
-	<div class="content">
+	<div id="content">
 		<div class="row">
-			<div class="col-sm-2"></div>
-  			<div class="col-sm-8" id="explain" style="margin-bottom: 50px;">
+			<div class="col-sm-2" ></div>
+  			<div class="col-sm-8" id="expl">
   				<h3>Search Results for: </h3>
-  				<h2>
+  				<h2 id="eng">
   					<?php 
   					if(isset($_POST['key']))
 					echo $_POST['key'];
   				?>
   				</h2>
+  				<div class="row">
+  				<form id="formsp">
+  					<div class="col-sm-9">
+				  		<div class="form-group">
+				            <select id="voice-select" class="form-control form-control-lg" ></select>
+		         		</div>
+		     		</div>
+			     	<div class="col-sm-0.5">
+			     	</div>
+			     	<div class="col-sm-1.5">
+			          <button class="btn btn-light btn-md" id="speak">Speak</button>
+			      	</div>
+				      <div class="col-sm-1">
+				      </div>
+		  		
+  				</form>
+				</div>
   				<hr style="border-top:1px solid black;">
   				<div>
   				<?php
 				   $db = new PDO("sqlite:dictionaries.db");
 				   if(!$db){
 				      echo $db->lastErrorMsg();
-				   } else {
-				     // echo "Opened database successfully \n\n";
-				   }
-
+				   	} 
 				   if(isset($_POST['key'])){
 					    if(strcasecmp( $_POST['key'], '' ) == 0){
-					   echo "Sorry, we didn't find any word that match your search.";
+					  
 						}
 				   else
 				   {
 				   	$s= $_POST["key"] ;
-				   $sql = "SELECT * from tbl_edict where word like " . "'" . $s ."%';";
+				   $sql = "SELECT * from tbl_edict where word like " . "'" . $s ."';";
 				 
 				   $ret = $db->query($sql);
 				   
@@ -81,6 +101,9 @@
 				    
 				      echo "Explain  ". $row['detail'] ."\n";
 				   }
+					if($row==0){
+						 echo "Sorry, we didn't find any word that match your search.";
+					}
 				   
 				   }
 				}
@@ -89,7 +112,7 @@
 
 					</div>
   			</div>
-  			<div class="col-sm-2"></div>
+  			<div class="col-sm-2"  ></div>
 		</div>
 	</div>
 	<footer class="container-fluid text-center">
@@ -111,7 +134,31 @@
 			</div>
 	</footer>
 
+ <script>
+$(document).ready(function(){
+ 
+ $('#key').typeahead({
+  source: function(query, result)
+  {
+   $.ajax({
+    url:"fetch.php",
+    method:"POST",
+    data:{query:query},
+    dataType:"json",
+    success:function(data)
+    {
+     result($.map(data, function(item){
+      return item;
+     }));
+    }
+   })
+  }
+ });
+ 
+});
 
+</script>
+  <script src="js/speak.js"></script>
 
 </body>
 </html>
